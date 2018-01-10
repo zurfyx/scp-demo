@@ -2,7 +2,7 @@
 
 ## Demo
 
-https://zurfyx.github.io/scp-demo/
+https://zurfyx.github.io/scp-demo/index.html
 
 ## Docs
 
