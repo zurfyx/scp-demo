@@ -1,0 +1,64 @@
+<html>
+<head>
+  <title>Content Security Policy (CSP) Demo</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+  <link rel="stylesheet" href="styles.css" /> 
+  <script>
+    document.getElementById('inline-js').innerText = 'Trying to unsuccesfully overwrite inline JS element';
+  </script>
+</head>
+<body>
+  <h1>Content Security Policy (CSP) Demo</h1>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</a>
+
+  <h2>Meta</h2>
+  <p>
+    <pre><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src 'self';&quot;&gt;</code></pre>
+  </p>
+  <p>
+    To enable CSP, you need to configure your web server to return the Content-Security-Policy HTTP header (sometimes you will see mentions of the X-Content-Security-Policy header, but that's an older version and you don't need to specify it anymore).
+  </p>
+  <p>
+    Alternatively, the <meta> element can be used to configure a policy, for example: 
+    <pre><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src 'self'; img-src https://*; child-src 'none';&quot;&gt;</code></pre>
+  </p>
+
+  <h2>&lt;div class=&quot;columns&quot;&gt;</h2>
+  <div class="columns">
+    <span>Remote</span>
+    <span>Local</span>
+    <img src="http://r.ddmcdn.com/s_f/o_1/cx_462/cy_245/cw_1349/ch_1349/w_720/APL/uploads/2015/06/caturday-shutterstock_149320799.jpg" width="50%" />
+    <img src="cat.jpg" width="50%" />
+  </div>
+  
+  <h2>&lt;span style=&quot;font-size:0.25em&quot;&gt;</h2>
+  <span style="font-size:0.25em">A CSP compatible browser will then only execute scripts loaded in source files received from those whitelisted domains, ignoring all other script (including inline scripts and event-handling HTML attributes).</span>
+
+  <h2>&lt;span id=&quot;file-js&quot;&gt;</h2>
+  <span id="file-js"><!-- Self file JS does work --></span>
+
+  <h2>&lt;span id=&quot;inline-js&quot;&gt;</h2>
+  <span id="inline-js">Inline JS doesn't work</span>
+
+  <h2>Try on the dev-tools</h2>
+  <p>These functions are defined in script.js (already loaded).</p>
+
+  <p>
+  <pre><code>
+    function tryFetchMaliciousURL () {
+      document.head.innerHTML = '&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;&quot;&gt;';
+      fetch('//example.com').then(v =&gt; console.info(v));
+    }</code></pre>
+  </p>
+
+  <p>
+    <pre><code>
+      function tryLoadMaliciousImage() {
+        document.head.innerHTML = '&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;&quot;&gt;';
+        document.body.innerHTML = '&lt;img src=&quot;http://r.ddmcdn.com/s_f/o_1/cx_462/cy_245/cw_1349/ch_1349/w_720/APL/uploads/2015/06/caturday-shutterstock_149320799.jpg&quot; width=&quot;50%&quot; /&gt;';
+      }</code></pre>
+  </p>
+
+  <script src="script.js"></script>
+</body>
+</html>
